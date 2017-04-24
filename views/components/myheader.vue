@@ -39,23 +39,6 @@
 </template>
 <script>
 	export default {
-		methods : {
-			props : ["locations"],
-			data() {
-				return {
-					locations : []
-				}
-			},
-			search() {
-				let term = document.getElementById("searchInput").value;
-				let api = `/search?term=${term}`;
-				axios.get(api).then(response => {
-					this.locations = response.data
-				}).catch(error => {
-					this.errorMsg = 'No user or no location'
-					this.data = []
-				})
-			}
-		}
+		props : ["search"]
 	}
 </script>

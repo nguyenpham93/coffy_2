@@ -51,7 +51,6 @@ app.get('/find/near', (req, res) => {
         })
         .catch(error => {
             console.log(error);
-            // error;
         });
 });
 
@@ -206,7 +205,6 @@ app.post('/find/location', (req, res) => {
 app.post('/find/district', (req, res) => {
     let type = parseFloat(req.body['inType2']),
         district = parseFloat(req.body['inDist']);
-    //let db = promise.db;
     db.any("SELECT id_location, name, address, octime, rate, lat, long, id_type, id_district FROM coffy.location " +
         "WHERE id_type = ${Type} AND id_district = ${District};",
         {
@@ -215,21 +213,12 @@ app.post('/find/district', (req, res) => {
         })
         .then(data => {
             async.mapSeries(data, merge2, (err, result) => {
-                // let dt = {
-                //     'datas': result
-                // };
-                //res.render('index1.html', dt);
-                // success;
                 res.json(result)
             })
         })
         .catch(error => {
             console.log(error);
-            // error;
         });
-    /*let results = search.findLocInDistrict(type, district);
-     console.log(results);
-     res.json(results);*/
 });
 
 function merge2(item, cb) {
@@ -267,12 +256,13 @@ function merge2(item, cb) {
 
 function searchField (item , cb){
     elas.search("coffy", "image", item.id_location, (err, resp) => {
-        item.image = resp[0]['name'];
+        let imgPath = '/public/coffy_img/' + resp[0]['name'];
+        item.image = imgPath;
         elas.search("coffy", "district", item.id_district, (err, resp) => {
             item.district = resp[0]['name'];
             elas.search("coffy", "type", item.id_type, (err, resp) => {
                 item.type = resp[0]['name'];
-                cb();
+                cb(null,item);
             });
         });
     });

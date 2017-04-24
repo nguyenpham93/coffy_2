@@ -1,7 +1,7 @@
 <template>
 	<div id="myhome">
 		<div class="header" >
-			<myheader :locations="locations"></myheader>
+			<myheader :search="search"></myheader>
 		</div>
 		<section class="container-fluid tab">
 			<div class="container mieuta">
@@ -134,7 +134,17 @@
                     .catch(error => {
                         this.locations = [];
                     });;
-            }
+            },
+			search() {
+				let term = document.getElementById("searchInput").value;
+				let api = `/search?term=${term}`;
+				axios.get(api).then(response => {
+					this.locations = response.data
+				}).catch(error => {
+					this.errorMsg = 'No user or no location'
+					this.data = []
+				})
+			}
         }
     }
 </script>
